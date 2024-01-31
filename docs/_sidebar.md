@@ -1,12 +1,10 @@
 <!--
  * @Date: 2024-01-16 13:47:00
  * @LastEditors: tandongyang =
- * @LastEditTime: 2024-01-26 15:10:36
- * @FilePath: /dongYangTan.github.io/docs/_sidebar.md
+ * @LastEditTime: 2024-01-31 17:36:27
+ * @FilePath: /markdown/dongYangTan.github.io/docs/_sidebar.md
 -->
 * [首页](/)
-* [指南](/detail/README.md) 
-
 * 前端技术
     * [html、css](web/html_css/)
     * [js](web/js/)
