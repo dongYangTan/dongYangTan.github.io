@@ -1,8 +1,8 @@
 <!--
  * @Date: 2024-01-16 14:36:46
  * @LastEditors: tandongyang =
- * @LastEditTime: 2024-01-17 15:37:54
- * @FilePath: /dongYangTan.github.io/docs/web/js/README.md
+ * @LastEditTime: 2024-01-31 17:06:15
+ * @FilePath: /markdown/dongYangTan.github.io/docs/web/js/README.md
 -->
 
 ## 1.数组splice
@@ -437,8 +437,23 @@ JS 异步有一个机制，就是遇到宏任务，先执行宏任务，将宏�
 **逻辑错误：** 这些错误是由于对具有不同操作的函数执行了错误的逻辑而导致的  
 
 
-## 32.
+## 32.使用 arr.filter(Boolean) 进行过滤
+```
+const arr = [0, 1, '', 'hello', null, undefined, false, true, NaN];
+const filteredArr = arr.filter(Boolean);
+console.log(filteredArr);
+// 输出: [1, 'hello', true]
+```
+
+如果想保留 false 和 0，同时过滤掉其他假值
+```
+const arr = [false, 0, '', 'hello', null, undefined, true];
+const filteredArr = arr.filter(item => item !== null && item !== undefined && item !== '');
+console.log(filteredArr);
+// 输出: [false, 0, 'hello', true]
+```
 ## 33.
+
 ## 34.
 ## 35.
 ## 36.
