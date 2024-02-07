@@ -1,7 +1,7 @@
 <!--
  * @Date: 2024-01-16 14:36:46
  * @LastEditors: tandongyang =
- * @LastEditTime: 2024-01-31 17:06:15
+ * @LastEditTime: 2024-02-07 14:35:13
  * @FilePath: /markdown/dongYangTan.github.io/docs/web/js/README.md
 -->
 
@@ -452,13 +452,372 @@ const filteredArr = arr.filter(item => item !== null && item !== undefined && it
 console.log(filteredArr);
 // 输出: [false, 0, 'hello', true]
 ```
-## 33.
+## 33.两种常见的方法可以解决跨域问题：JSONP和CORS。
+1) JSONP（JSON with Padding）：JSONP是一种通过动态添加 script 标签的跨域特性，可以从其他域的服务器获取数据并执行回调函数。JSONP只支持GET请求，并且需要服务器端配合返回合适的响应。使用JSONP时，需要在客户端和服务器端进行相应的配置。  JSONP 存在一些安全隐患，比如可能受到跨站脚本攻击（XSS）等问题  
+2) CORS（Cross-Origin Resource Sharing）：CORS是一种基于HTTP头部的机制，允许服务器声明哪些跨域请求是允许的。通过在服务器返回的响应头中包含特定的CORS头部，服务器可以与其他域进行跨域通信。CORS支持各种HTTP请求方法，并提供了更灵活、安全的跨域解决方案。使用CORS时，需要在服务器端进行相应的配置。  
+* 关于设置document.domain = "example.com";处理跨域问题的方法是针对相同顶级域名下的不同子域名之间的通信。通过将页面的document.domain属性设置为相同的顶级域名，可以解决跨子域之间的同源策略限制，从而实现跨子域的通信。
+#### document.domain 应用
+* 单点登录（Single Sign-On）：当一个网站拥有多个子域名时，可以使用 document.domain 属性将不同子域名的文档设置为相同的根域名，从而实现单点登录。这允许用户在一个*子域名登录后，在其他子域名上也被认可为已登录状态，避免了用户在每个子域名上重复登录的问题。
+* 跨域通信：当网站的不同子域名之间需要进行跨域通信时，可以使用 document.domain 属性解决同源策略的限制。通过将文档的域名设置为相同的根域名，使得不同子域名之间可以共享 JavaScript 对象、执行函数调用等操作。
+* 前端微服务架构：在前端微服务架构中，不同的微服务可能部署在不同的子域名上。使用 document.domain 属性可以解决不同子域名之间的跨域通信问题，使得不同的微服务可以在客户端进行协同工作。
 
-## 34.
-## 35.
-## 36.
-## 37.
-## 38.
-## 39.
-## 40.
 
+## 34.addEventListener/onclick
+addEventListener：适用于添加多个事件监听器，并且能够在事件的不同阶段（捕获、目标、冒泡）上进行处理。提供更灵活和有组织的事件管理。  
+onclick：只能为每个元素添加一个事件处理程序，不支持多个处理程序。
+
+
+## 35. script defer 属性
+defer 属性确保 JavaScript 代码在 HTML 解析完成后执行，而不会阻塞页面的渲染过程。这意味着浏览器会并行下载 JavaScript 文件，并在 HTML 解析完成后执行代码。然而，对于图片资源，浏览器会在解析 HTML 过程中按照它们在文档中的顺序逐个下载和显示图片。  
+因此，如果页面中存在大量图片资源，而 JavaScript 代码被设置为 defer，那么在 HTML 解析完成时，这些图片资源可能仍在加载中，而 JavaScript 代码已经开始执行。这可能导致 JavaScript 代码对于尚未加载完成的图片资源进行操作，可能会出现问题。  
+相反，使用 window.addEventListener("load", () => {}) 来监听 load 事件，可以确保代码在所有资源（包括图片）加载完成后再执行。这样可以避免在 JavaScript 代码执行过程中出现对未加载完成的图片资源的操作。   
+综上所述，如果页面中包含大量的图片资源，并且你需要确保 JavaScript 代码在所有资源加载完成后再执行，建议使用 window.addEventListener("load", () => {}) 来监听 load 事件。这样可以确保 JavaScript 代码在所有资源都可用时执行，避免潜在的问题。   
+DOMContentLoaded 事件在 HTML 文档解析过程中触发，表示 DOM 已经准备就绪，可以操作 DOM 元素，但页面的其他资源可能尚未加载完成。而 load 事件在所有页面及其相关资源都加载完成后触发，表示整个页面已经可以完全访问和操作。  
+    
+
+## 36.offsetWidth 和 clientWidth 是用于获取元素宽度的属性
+offsetWidth 是一个只读属性，用于获取元素的外部宽度，包括元素的可见内容宽度、内边距（padding）、边框（border）以及垂直滚动条（如果存在）的宽度    
+clientWidth 是一个只读属性，用于获取元素的内容区域宽度，即元素可见内容的宽度，不包括内边距、边框和滚动条的宽度  
+
+## 37.JavaScript
+JavaScript 是一种单线程语言，这意味着 JavaScript 引擎在执行 JavaScript 代码时只有一个主线程。这个主线程按照代码的顺序执行，一次只能执行一个任务。  
+ 
+## 38.location navigation history 对象是 JavaScript 中的内置对象
+* location.href：返回当前页面的完整 URL。可以通过该属性获取或设置页面的 URL。
+
+* location.protocol：返回当前页面的协议部分，例如 "http:" 或 "https:"。
+
+* location.host：返回当前页面的主机名和端口号部分。
+
+* location.hostname：返回当前页面的主机名部分，不包括端口号。
+
+* location.port：返回当前页面的端口号部分。
+
+* location.pathname：返回当前页面的路径部分，包括初始的斜杠 ("/")。
+
+* location.search：返回当前页面的查询字符串部分，包括问号 ("?")。
+
+* location.hash：返回当前页面的片段标识符部分，包括井号 ("#")。
+
+* location.origin：返回当前页面的协议、主机名和端口号部分。
+
+* navigation.userAgent：返回用户代理字符串，即浏览器发送给服务器的标识信息，包含浏览器和操作系统的信息。
+
+* navigation.appVersion：返回浏览器的版本号。
+
+* navigation.platform：返回运行浏览器的平台，如 "Win32" 或 "MacIntel"。
+
+* navigation.cookieEnabled：返回一个布尔值，表示浏览器是否启用了 cookie。
+
+* navigation.language：返回当前浏览器环境的首选语言，通常是浏览器界面的语言。
+
+* navigation.onLine：返回一个布尔值，表示浏览器是否处于在线状态。
+
+* navigation.javaEnabled()：返回一个布尔值，表示浏览器是否启用了 Java。
+
+* history.length：返回浏览器历史记录中的页面数量。
+
+* history.back()：导航到上一个页面，相当于用户点击浏览器的后退按钮。
+
+* history.forward()：导航到下一个页面，相当于用户点击浏览器的前进按钮。
+
+* history.go(n)：导航到相对于当前页面的第 n 个页面，n 可以是正数、负数或零。
+
+* history.pushState(state, title, url)：向浏览器历史记录中添加一个新的状态，并且不会引发页面的加载。它接受三个参数：state（一个表示新状态的对象），title（新状态的标题，目前大多数浏览器忽略这个参数），url（新状态的 URL）。history.pushState({ page: 1 }, "Page 1", "page1.html"); // 添加新的历史状态
+
+* history.replaceState(state, title, url)：替换当前历史记录中的状态，并且不会引发页面的加载。与 pushState() 方法类似，但是它不会在浏览器历史记录中创建新的条目，而是替换当前的条目。history.replaceState({ page: 2 }, "Page 2", "page2.html"); // 替换当前的历史状态
+
+## 39.JavaScript 中的垃圾回收机制是一种自动管理内存的机制，它负责检测不再使用的对象，并释放其所占用的内存空间，以供后续使
+> 标记清除（Mark and Sweep）：
+* 当变量进入执行环境时，垃圾回收器会给这个变量加上标记。
+* 当变量不再使用时，垃圾回收器会给这个变量加上标记。
+* 当垃圾回收器运行时，它会标记所有从根变量（全局对象、当前执行环境的变量）开始可以访问到的变量。
+* 在标记完成后，垃圾回收器会清除所有没有标记的变量，释放它们所占用的内存空间。
+> 引用计数（Reference Counting）：
+* 垃圾回收器会跟踪记录每个对象的被引用次数。
+* 当变量引用一个对象时，被引用计数加 1。
+* 当变量不再引用一个对象时，被引用计数减 1。
+* 当对象的被引用计数为 0 时，表示没有变量引用该对象，垃圾回收器将清除该对象并回收其内存空间。  
+**在现代 JavaScript 引擎中，通常使用标记清除算法来进行垃圾回收。引用计数虽然简单，但容易出现循环引用的问题，导致无法正确回收对象。因此，大多数现代 JavaScript 引擎已经转向使用标记清除算法来进行垃圾回收。**  
+
+## 40.闭包（Closure）
+闭包（Closure）是指能够访问自己词法作用域之外的变量的函数。换句话说，闭包是在函数内部创建的函数，该函数可以访问外部函数中的变量，并将其保存在内存中，即使外部函数已经执行完毕，闭包仍然可以访问和操作这些变量。
+## 41.伪数组
+* 类数组结构：伪数组对象通常具有类似数组的结构，即具有通过数字索引访问元素的能力。例如，它们可以使用类似obj[0]的语法来访问元素。
+* length属性：伪数组对象通常具有length属性，表示它们包含的元素数量。
+* 无数组方法和属性：伪数组对象通常不具有数组对象的原生方法和属性，例如push()、pop()、slice()等方法。它们也不继承自Array原型链。
+```
+function example() {
+    console.log(arguments); // 伪数组对象
+
+    // 将伪数组转换为真正的数组
+    const arr = Array.from(arguments);
+    console.log(arr); // 真正的数组
+}
+example(1, 2, 3);
+请注意，虽然伪数组对象具有类似数组的特点，但它们并非真正的数组，在某些情况下可能会导致意料之外的行为或错误。因此，在使用伪数组对象时，需要注意其特性和限制，并根据需要进行必要的转换。
+```
+常见伪数组对象（如函数的arguments对象、DOM元素集合、NodeList对象、HTMLCollection对象），还有一些其他的伪数组对象。  
+* 字符串（String）：字符串可以通过索引访问单个字符，具有类似数组的结构和length属性，但不能直接使用数组方法。
+```
+const str = "Hello";
+console.log(str[0]); // "H"
+console.log(str.length); // 5
+```
+* TypedArray：TypedArray是JavaScript中的一组类型化数组，如Int8Array、Uint8Array等。它们也具有类似数组的结构和length属性，但不能直接使用数组方法。
+```
+const typedArray = new Uint8Array(4);
+typedArray[0] = 1;
+typedArray[1] = 2;
+console.log(typedArray.length); // 4
+```
+* 具有迭代器接口的对象：一些对象实现了迭代器接口，使得它们可以被迭代（如通过for...of循环遍历）。这些对象虽然不是真正的数组，但可以通过迭代器接口访问它们的元素。
+```
+const obj = {
+  0: 'a',
+  1: 'b',
+  2: 'c',
+  length: 3,
+  [Symbol.iterator]: function* () {
+    for (let i = 0; i < this.length; i++) {
+      yield this[i];
+    }
+  }
+};
+for (const item of obj) {
+  console.log(item);// "a", "b", "c"
+}
+```
+
+## 42.原型对象
+在 JavaScript 中，每个对象都有一个原型对象（prototype object）。原型对象是一个普通的对象，用于共享属性和方法。
+* Object.create() 方法的使用
+
+```
+// 定义一个原型对象
+const personPrototype = {
+  greet: function() {
+    console.log('Hello!');
+  }
+};
+
+// 创建一个对象并指定其原型对象为 personPrototype
+const person = Object.create(personPrototype);
+
+person.greet(); // 输出: Hello!
+```
+
+* 如何在构造函数中创建原型对象
+
+```
+// 构造函数
+function Person(name) {
+  this.name = name;
+}
+
+// 在原型对象上定义方法
+Person.prototype.greet = function() {
+  console.log('Hello, my name is ' + this.name);
+};
+
+// 创建对象实例
+var person1 = new Person('Alice');
+var person2 = new Person('Bob');
+
+person1.greet(); // 输出: Hello, my name is Alice
+person2.greet(); // 输出: Hello, my name is Bob
+使用 Person.prototype 来定义原型对象，并将 greet 方法添加到原型对象上。这样，通过构造函数创建的所有对象实例都可以共享 greet 方法，就像类方法一样。  
+```
+## 43.\_\_proto\_\_ 和 prototype 这两个属性在 JavaScript 中经常容易混淆，因为它们都涉及到对象的原型
+* \_\_proto\_\_ 是每个 JavaScript 对象都具有的一个内部属性，用于指向该对象的原型。它是一个非标准的属性，但是在许多浏览器和环境中都被支持。通过 \_\_proto\_\_ 可以直接访问和修改对象的原型。然而，它不推荐在生产代码中使用，因为它不是标准的，并且可能不可靠。
+
+* prototype 是在构造函数上定义的一个属性。当使用 new 关键字创建一个对象时，该对象的 [[ Prototype ]] 属性会被设置为构造函数的 prototype 属性的值。它用于定义构造函数创建的对象实例的原型。我们可以通过构造函数的 prototype 属性来添加方法和属性，这些方法和属性将会在通过该构造函数创建的对象实例中共享。   
+在简单的术语中，可以说 \_\_proto\_\_ 是对象自己的原型属性，而 prototype 是构造函数的原型属性。   
+
+**对象原型\_\_proto\_\_指向原型对象 prototype**  
+> 只要是对象 就会有\_\_proto\_\_  
+> 只要是原型 就会有constructor  
+## 44.原型链
+原型链是 JavaScript 中实现对象之间继承的机制。每个对象都有一个内部属性 \_\_proto\_\_，它指向该对象的原型。如果一个对象访问某个属性或方法时，在该对象本身找不到时，JavaScript 引擎会沿着原型链向上查找，直到找到该属性或方法或者到达原型链的顶端。 
+
+## 45. 创建一个模态弹窗案例 面向对象思想
+```
+  <style>
+       .divbox {
+            position: absolute;
+            padding: 20px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: gray;
+
+        }
+  </style>
+
+  <script>
+
+        function Model(title = '', msg = '') {
+            this.modelBox = document.createElement('div');
+            this.modelBox.className = 'model';
+            this.modelBox.innerHTML = `
+            <div class='divbox'>
+                <div>${title}</div>
+                 <div>${msg}</div>
+                 <i>关闭X</i>
+            </div>`
+        }
+        Model.prototype.open = function () {
+            //判断页面是否已经存在model
+            const box = document.querySelector('.model')
+            box && box.remove()
+            document.body.append(this.modelBox);
+            // 等着盒子打开 再绑定关闭事件
+            // 这里要箭头函数  要不this然指向的是i
+            this.modelBox.querySelector('i').addEventListener('click', () => {
+                this.close();
+            });
+        }
+        Model.prototype.close = function () {
+            this.modelBox.remove()
+        }
+
+
+        document.querySelector('.delete').addEventListener('click', () => {
+
+            const del = new Model('标题啊', '描述内容');
+            del.open()
+        })
+    </script>
+
+```
+## 46.深拷贝 - 递归
+```
+    <script>
+        const obj = {
+            uname: 'aaa',
+            age: 18,
+            hobby: ['足球', '篮球'],
+        };
+        const o = {};
+        function deepCopy(newObj, oldObj) {
+            for (const key in oldObj) {
+                // 要先写数组 后写对象
+                if (oldObj[key] instanceof Array) {
+                    newObj[key] = []
+                    deepCopy(newObj[key], oldObj[key])
+                } else if (oldObj[key] instanceof Object) {
+                    newObj[key] = {}
+                    deepCopy(newObj[key], oldObj[key])
+                } else {
+                    newObj[key] = oldObj[key]
+                }
+            }
+        }
+        deepCopy(o, obj)
+
+    </script>
+```
+## 47.深拷贝 - JSON.parse() 和 JSON.stringify() 
+```
+function deepCopy(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+先变为简单数据类型 然后再转对象
+```
+
+## 48.深拷贝 - 第三方库（例如 Lodash）的 cloneDeep() 
+```
+var _ = require('lodash');
+
+var obj1 = { name: 'Alice', age: 25 };
+var obj2 = _.cloneDeep(obj1);
+obj2.name = 'Bob';
+
+console.log(obj1.name); // 输出: Alice
+console.log(obj2.name); // 输出: Bob
+```
+
+## 49.this
+```
+<button id="myButton">Click me</button>
+
+const button = document.getElementById('myButton');
+button.addEventListener('click', function() {
+  // 这里的`this`指向触发事件的按钮元素 此处如果使用箭头函数 this指向window。
+  console.log(this); // 输出<button id="myButton">Click me</button>
+});
+```
+
+
+## 50.改变this的指向
+
+* bind()方法
+
+```
+const obj = {
+  name: 'John',
+  sayHello: function() {
+    console.log(`Hello, ${this.name}`);
+  }
+};
+
+const otherObj = {
+  name: 'Jane'
+};
+
+const boundFunc = obj.sayHello.bind(otherObj);
+boundFunc(); // 输出：Hello, Jane
+```
+
+* 使用箭头函数
+
+```
+const obj = {
+  name: 'John',
+  sayHello: function() {
+    const innerFunc = () => {
+      console.log(`Hello, ${this.name}`);
+    };
+    innerFunc();
+  }
+};
+
+const otherObj = {
+  name: 'Jane'
+};
+
+obj.sayHello.call(otherObj); // 输出：Hello, Jane
+
+```
+
+* call()或apply()方法 
+
+```
+const obj = {
+  name: 'John',
+  sayHello: function() {
+    console.log(`Hello, ${this.name}`);
+  }
+};
+
+const otherObj = {
+  name: 'Jane'
+};
+
+obj.sayHello.call(otherObj); // 输出：Hello, Jane
+obj.sayHello.apply(otherObj); // 输出：Hello, Jane
+两者区别在于第二个参数 
+bind(this的指向，arg1,arg2)  bind()方法创建一个新的函数，并将其this值绑定到指定的对象。它的返回值是一个绑定了指定this值的新函数，需加（）执行函数。
+call(this的指向，arg1,arg2)  call()方法会立即调用函数，并指定函数内部的this值。它的返回值是函数的执行结果。
+apply(this的指向，[arg1,arg2]) 
+
+call和apply只要使用会立刻调用函数 
+但是 bind不会，可以在合适的时机调用
+```
+
+## 51.防抖（Debouncing）
+用于限制事件触发的频率，当一个事件被触发时，防抖会延迟一段时间（等待时间），如果在这段时间内再次触发了同一事件，则会重新计时。只有当一定时间内没有再次触发事件时，才会执行相应的操作。防抖主要用于处理频繁触发的事件，例如窗口调整大小、滚动等。  
+例如：王者荣耀回城  
+## 52.截流（Throttling） 
+用于限制事件触发的频率。与防抖不同，截流会在一定时间间隔内稳定地执行事件处理函数，而不会重复执行。如果在时间间隔内有多次触发事件的情况，只有第一次触发会立即执行处理函数，后续触发会被忽略，直到时间间隔过去后才会再次执行。  
+例如：王者荣耀技能冷却  
