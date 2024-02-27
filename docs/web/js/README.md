@@ -1,8 +1,8 @@
 <!--
  * @Date: 2024-01-16 14:36:46
  * @LastEditors: tandongyang =
- * @LastEditTime: 2024-02-07 14:35:13
- * @FilePath: /markdown/dongYangTan.github.io/docs/web/js/README.md
+ * @LastEditTime: 2024-02-27 18:25:39
+ * @FilePath: /dongYangTan.github.io/docs/web/js/README.md
 -->
 
 ## 1.数组splice
@@ -637,6 +637,11 @@ person2.greet(); // 输出: Hello, my name is Bob
 **对象原型\_\_proto\_\_指向原型对象 prototype**  
 > 只要是对象 就会有\_\_proto\_\_  
 > 只要是原型 就会有constructor  
+
+<img src="../../_media/obj.jpg" alt="对象原型指向原型对象" width="60%"/>    
+
+ Person实例对象的对象原型指向Person的原型对象，顺着原型链，Person的原型对象的对象原型 指向Object的原型对象  
+
 ## 44.原型链
 原型链是 JavaScript 中实现对象之间继承的机制。每个对象都有一个内部属性 \_\_proto\_\_，它指向该对象的原型。如果一个对象访问某个属性或方法时，在该对象本身找不到时，JavaScript 引擎会沿着原型链向上查找，直到找到该属性或方法或者到达原型链的顶端。 
 
