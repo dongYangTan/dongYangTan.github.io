@@ -1,7 +1,7 @@
 <!--
  * @Date: 2024-01-16 14:36:46
  * @LastEditors: tandongyang =
- * @LastEditTime: 2024-02-28 11:41:36
+ * @LastEditTime: 2024-02-28 11:43:05
  * @FilePath: /dongYangTan.github.io/docs/web/js/README.md
 -->
 
@@ -642,7 +642,7 @@ person2.greet(); // 输出: Hello, my name is Bob
 
 <img src="../../_media/Snipaste_yuanxing.png" alt="对象原型指向原型对象" width="70%"/>    
 
-<img src="../../_media/Snipaste_Snipaste_yuanxing2.png" alt="对象原型指向原型对象" width="70%"/>    
+<img src="../../_media/Snipaste_yuanxing2.png" alt="对象原型指向原型对象" width="70%"/>    
 
  Person实例对象的对象原型指向Person的原型对象，顺着原型链，Person的原型对象的对象原型 指向Object的原型对象  
 
