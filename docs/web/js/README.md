@@ -1,7 +1,7 @@
 <!--
  * @Date: 2024-01-16 14:36:46
  * @LastEditors: tandongyang =
- * @LastEditTime: 2024-02-28 11:43:05
+ * @LastEditTime: 2024-03-29 11:14:48
  * @FilePath: /dongYangTan.github.io/docs/web/js/README.md
 -->
 
@@ -830,3 +830,285 @@ call和apply只要使用会立刻调用函数
 ## 52.截流（Throttling） 
 用于限制事件触发的频率。与防抖不同，截流会在一定时间间隔内稳定地执行事件处理函数，而不会重复执行。如果在时间间隔内有多次触发事件的情况，只有第一次触发会立即执行处理函数，后续触发会被忽略，直到时间间隔过去后才会再次执行。  
 例如：王者荣耀技能冷却  
+
+
+## 1-1 作用域
+
+```      输出是 1
+    var value = 1;
+    function foo() {
+       console.log(value);
+    }
+    function foo2() {
+        var value = 2;
+        foo()
+    }
+    foo2()
+
+```
+当您调用 foo2() 时，它首先声明了一个局部变量 value 并赋值为 2。然后，它调用了 foo() 函数。    
+由于 foo() 函数在定义时没有自己的局部变量 value，它会沿着作用域链向上查找 value。在 foo() 的作用域链中，第一个找到的 value 是全局作用域中的 value，其值为 1。因此，foo() 函数打印的是全局变量 value 的值，即 1。    
+foo2() 函数中声明的局部变量 value 对 foo() 函数是不可见的，因为 foo() 的作用域链并不包括 foo2() 的作用域。这就是为什么 foo() 忽略 foo2() 中定义的 value 并打印全局 value 的值。    
+所以，最终的输出是 1  
+
+## 1-2 性能优化 前端一次渲染10万条数据
+* 1.使用定时器和延迟加载是一种将大数据集分批加载的常见方法  
+
+```  
+
+import React, { useState, useEffect } from 'react';
+
+function MyComponent() {
+  const [data, setData] = useState([]); // 存储数据的状态
+  const batchSize = 1000; // 每批加载的数据量
+  const delay = 100; // 每批数据加载的延迟时间（毫秒）
+
+  useEffect(() => {
+    const fetchData = async () => {
+      // 模拟获取所有数据的异步操作
+      const allData = await fetchDataFromServer();
+      const totalBatches = Math.ceil(allData.length / batchSize); // 计算总共需要加载的批次数
+
+      let currentBatch = 0; // 当前加载的批次
+
+      const timer = setTimeout(function loadBatch() {
+        const startIndex = currentBatch * batchSize;
+        const endIndex = Math.min(startIndex + batchSize, allData.length);
+        const newData = allData.slice(startIndex, endIndex); // 获取当前批次的数据
+
+        setData(prevData => [...prevData, ...newData]); // 使用函数式更新形式更新状态
+
+        currentBatch++;
+
+        if (currentBatch < totalBatches) {
+          timer = setTimeout(loadBatch, delay); // 继续加载下一批数据
+        }
+      }, delay);
+
+      return () => {
+        clearTimeout(timer);
+      };
+    };
+
+    fetchData(); // 在组件挂载时执行获取数据的操作
+  }, []); // 空依赖数组确保只在组件挂载时执行一次
+
+  return (
+    <div>
+      {/* 渲染数据 */}
+      {data.map((item, index) => (
+        <p key={index}>{item}</p>
+      ))}
+    </div>
+  );
+}
+
+export default MyComponent;
+
+
+```  
+
+
+使用requestAnimationFrame可以更好地优化渲染性能，避免造成不必要的性能损失。下面是优化后的示例代码：
+
+```
+上面例子 快速滚动列表可能出现掉帧的问题
+用requestAnimationFrame替代了setTimeout，以便更好地利用浏览器的渲染机制。  
+requestAnimationFrame会在浏览器准备好渲染下一帧时调用回调函数，因此可以更加高效地进行数据加载和渲染。  
+
+import React, { useState, useEffect } from 'react';
+
+function MyComponent() {
+  const [data, setData] = useState([]); // 存储数据的状态
+  const batchSize = 1000; // 每批加载的数据量
+  const delay = 100; // 每批数据加载的延迟时间（毫秒）
+
+  useEffect(() => {
+    const fetchData = async () => {
+      // 模拟获取所有数据的异步操作
+      const allData = await fetchDataFromServer();
+      const totalBatches = Math.ceil(allData.length / batchSize); // 计算总共需要加载的批次数
+
+      let currentBatch = 0; // 当前加载的批次
+
+      const loadBatch = () => {
+        const startIndex = currentBatch * batchSize;
+        const endIndex = Math.min(startIndex + batchSize, allData.length);
+        const newData = allData.slice(startIndex, endIndex); // 获取当前批次的数据
+
+        setData(prevData => [...prevData, ...newData]); // 使用函数式更新形式更新状态
+
+        currentBatch++;
+
+        if (currentBatch < totalBatches) {
+          requestAnimationFrame(loadBatch); // 继续加载下一批数据
+        }
+      };
+
+      requestAnimationFrame(loadBatch); // 在下一帧开始加载数据
+    };
+
+    fetchData(); // 在组件挂载时执行获取数据的操作
+  }, []); // 空依赖数组确保只在组件挂载时执行一次
+
+  return (
+    <div>
+      {/* 渲染数据 */}
+      {data.map((item, index) => (
+        <p key={index}>{item}</p>
+      ))}
+    </div>
+  );
+}
+
+export default MyComponent;
+
+```
+
+* 2.触底加载  
+* 3.虚拟列表  
+useEffect钩子中监听列表容器的滚动事件。当滚动发生时，我们根据滚动位置计算出可见区域的起始索引和结束索引，并从完整的聊天消息中提取出可见区域的消息。   
+然后，我们可以更新可见区域的聊天消息的渲染状态。在这个函数中，你可以根据需要将可见区域的聊天消息渲染到DOM中，或者执行其他操作来更新渲染状态。  
+通过使用虚拟列表，聊天应用只会渲染当前可见区域的聊天消息，而不需要一次性渲染整个10万条的聊天记录。这样可以减少DOM操作和提高渲染性能，使用户能够流畅地浏览聊天记录。    
+
+## 1-3 自定义call函数  bind函数
+```
+var person = {
+    getName: function () {
+        return this.name
+    }
+}
+var man = {
+    name: 'zhangsan'
+}
+Function.prototype.myCall = function (context) {
+  // 如接收参数 自定义call 可用arguments.slice[1] 截取出 除了[0]的其他值；自定义apply参数展开数组arguments[1]  
+    context.fn = this
+    const res = context.fn()
+    delete context.fn()
+    return res;
+}
+Function.prototype.myBind = function (context) {
+    const fn = this
+    return () => {
+        fn.call(context)
+    };
+}
+
+
+console.log(person.getName.myCall(man), ':end')
+```
+
+
+## 1-4 call使用场景 检验对象类型
+* Object.prototype.toString.call(obj or arr) === ('[object Object]' or '[object Array]')    
+* 1-5中 es5方式 转化伪数组为真数组  
+
+## 1-5 伪数组 转化真正数组
+```
+function fn() {
+  console.log(arguments)
+
+  // es6方式
+  console.log([...arguments])
+
+  //
+  // es5方式  arguments伪数组没有slice方法 所以使用数组原型上slice，.call(arguments)  
+   调用 slice 方法，并将arguments 对象作为上下文（即 this）传递给它  
+  console.log(Array.prototype.slice.call(arguments), '1')
+}
+
+```
+
+
+## 1-6  js单线程 解释性语言
+ 事件循环机制由三部分组成：调用栈 微任务队列 消息队列   
+event-loop开始的时候，会从全局一行一行执行，遇到函数调用，会压入调用栈中，被压入的函数被称之为帧，当函数返回后会从调用栈中弹出；js中的异步操作比如fetch setTimeout setInterval 压入到调用栈中的时候里面的消息会进入到消息队列中去，消息队列中会等到调用栈清空之后在执行；promise async await的异步操作会加入到微任务中，他会等调用栈清空的时候立即执行。 微任务的权限高于消息队列。  
+
+## 1-7 BFC  
+块级格式化上下文，它是指一个独立的块级渲染区域，只有block-level Box参与，该区域拥有一套渲染规则来约束块级盒子的布局，与区域外无关。
+快速创建BFC：  
+- float不为none  
+- position不是static或者relative
+- display值是inlne-block，flex或者inline-flex
+- overflow：hidden
+BFC可以取消盒子的margin塌陷问题，可以阻止元素被浮动元素覆盖；    
+
+
+## 1-8 es6 Symbol  
+获取person对象的所有key 使用Reflect.ownKeys(person)  
+Symbol.for('foo')创建同一个Symbol值（Symbol.keyFor() 获取Symbol.for里的值）
+
+## 1-9 XSS分类 
+```
+  类型        存储区                   插入点    
+存储型XSS    后端数据库                  HTML      
+反射型XSS      URL                      HTML      
+DOM型XSS    后端数据库/前端存储/URL    前端javaScript    
+```  
+
+## 1-10 原型链是JavaScript中用于实现继承和属性查找的机制
+
+```
+
+function Person(name) {  
+    this.name = name;  
+}  
+  
+Person.prototype.sayHello = function() {  
+    console.log('Hello, my name is ' + this.name);  
+};  
+  
+function Student(name, grade) {  
+    // 调用父构造函数  
+    Person.call(this, name);  
+    this.grade = grade;  
+}  
+  
+// 继承Person的原型链  
+Student.prototype = Object.create(Person.prototype);  
+Student.prototype.constructor = Student;  
+  
+// 为Student添加特有的方法  
+Student.prototype.introduce = function() {  
+    console.log('I am a student. My name is ' + this.name + ' and I am in grade ' + this.grade);  
+};  
+  
+var student1 = new Student('Bob', '12th');  
+student1.sayHello(); // 输出: Hello, my name is Bob  
+student1.introduce(); // 输出: I am a student. My name is Bob and I am in grade 12th
+
+```
+
+
+## 1-11 继承和原型链
+在JavaScript中，继承和原型链是紧密相关的概念。原型链是实现继承的主要机制之一，它允许对象通过原型对象来共享属性和方法
+
+## 1-12 隐式转换
+console.log([] == 0)  // true Number([].valueOf().tostring()) == 0    
+console.log(![] == 0)  // true !Boolean([]) == 0    
+Boolean转化 只有 Nan false ‘’ undefined null 0 只有这6个是false其他都为true  
+
+console.log(![] == [])  true false和[].valueOf().tostring()=‘’比较  
+console.log([] == [])  false  
+
+console.log(!{} == {})  false  false和{}.valueOf().tostring()='object Object'是true来 比较 
+console.log({} == {})  false  
+
+## 1-13 
+
+## 1-14 
+
+## 1-15 
+
+## 1-16 
+
+## 1-17 
+
+## 1-18 
+
+## 1-19 
+
+## 1-20 
+
+
