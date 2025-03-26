@@ -1,11 +1,11 @@
 <!--
  * @Date: 2024-01-16 14:36:47
- * @LastEditors: tandongyang =
- * @LastEditTime: 2024-01-17 15:03:14
+ * @LastEditors: 谭冬阳 tandongyang@youlai.cn
+ * @LastEditTime: 2025-03-26 16:47:06
  * @FilePath: /dongYangTan.github.io/docs/web/react/README.md
 -->
 
-## 1. 如何实现组件的懒加载
+## 1. 如何实现组件懒加载
 从 16.6.0 开始，React 提供了 lazy 和 Suspense 来实现懒加载。  
 属性fallback表示在加载组件前，渲染的内容。
 ```
